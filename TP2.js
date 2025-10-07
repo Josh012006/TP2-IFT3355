@@ -547,6 +547,18 @@ class Robot {
         this.chest.visible = false;
         this.neck.visible = false;
         this.head.visible = false;
+        this.armLeft.visible = false;
+        this.forearmLeft.visible = false;
+        this.handLeft.visible = false;
+        this.armRight.visible = false;
+        this.forearmRight.visible = false;
+        this.handRight.visible = false;
+        this.legLeft.visible = false;
+        this.shinLeft.visible = false;
+        this.footLeft.visible = false;
+        this.legRight.visible = false;
+        this.shinRight.visible = false;
+        this.footRight.visible = false;
     }
     hideHuman() {
         this.human.visible = false;
@@ -557,7 +569,18 @@ class Robot {
         this.chest.visible = true;
         this.neck.visible = true;
         this.head.visible = true;
-
+        this.armLeft.visible = true;
+        this.forearmLeft.visible = true;
+        this.handLeft.visible = true;
+        this.armRight.visible = true;
+        this.forearmRight.visible = true;
+        this.handRight.visible = true;
+        this.legLeft.visible = true;
+        this.shinLeft.visible = true;
+        this.footLeft.visible = true;
+        this.legRight.visible = true;
+        this.shinRight.visible = true;
+        this.footRight.visible = true;
     }
     showHuman() {
         this.human.visible = true;
@@ -572,7 +595,7 @@ class Robot {
 	}
 
     animate(t) {
-        
+        // Do animation here
 
     }
 
