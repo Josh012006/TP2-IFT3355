@@ -351,134 +351,149 @@ class Robot {
         
 
         // Chest matrix
-		this.chestMatrix = new THREE.Matrix4().set(
+		var chestMatrix = new THREE.Matrix4().set(
                 1, 0, 0, 0,
                 0, 1, 0, this.chestTranslation.y-this.spineLength/2+this.chestLength/2,
                 0, 0, 1, 0,
                 0, 0, 0, 1);
-		var chestMatrix =  new THREE.Matrix4().multiplyMatrices(this.spineMatrix, this.chestMatrix);
+		chestMatrix =  new THREE.Matrix4().multiplyMatrices(this.spineMatrix, chestMatrix);
+        this.chestMatrix = chestMatrix;
 
 
         // Neck matrix
-        this.neckMatrix = new THREE.Matrix4().set(
+        var neckMatrix = new THREE.Matrix4().set(
                 1, 0, 0, 0,
                 0, 1, 0, this.neckTranslation.y-this.chestLength/2+this.neckLength/2,
                 0, 0, 1, 0,
                 0, 0, 0, 1);
-        var neckMatrix = new THREE.Matrix4().multiplyMatrices(chestMatrix, this.neckMatrix);
+        neckMatrix = new THREE.Matrix4().multiplyMatrices(chestMatrix, neckMatrix);
+        this.neckMatrix = neckMatrix;
 
 
         // Head matrix
-        this.headMatrix = new THREE.Matrix4().set(
+        var headMatrix = new THREE.Matrix4().set(
                 1, 0, 0, 0,
                 0, 1, 0, this.headTranslation.y-this.neckLength/2+this.headLength/2,
                 0, 0, 1, 0,
                 0, 0, 0, 1);
-        var headMatrix = new THREE.Matrix4().multiplyMatrices(neckMatrix, this.headMatrix);
+        headMatrix = new THREE.Matrix4().multiplyMatrices(neckMatrix, headMatrix);
+        this.headMatrix = headMatrix;
         
         // ArmLeft matrix
-        this.armLeftMatrix = translation(
+        var armLeftMatrix = translation(
             this.armLeftTranslation.x,
             this.armLeftTranslation.y - this.chestLength/2,
             0
         );
-        var armLeftMatrix = matMul(chestMatrix, this.armLeftMatrix);
+        armLeftMatrix = matMul(chestMatrix, armLeftMatrix);
         armLeftMatrix = matMul(armLeftMatrix, rotZ(-pi/2));
         armLeftMatrix = matMul(armLeftMatrix, translation(0, this.armLength/2, 0));
+        this.armLeftMatrix = armLeftMatrix;
 
         // ForearmLeft matrix
-        this.forearmLeftMatrix = translation(
+        var forearmLeftMatrix = translation(
             0,
             this.forearmLeftTranslation.y - this.armLength/2 + this.forearmLength/2,
             0,
         );
-        var forearmLeftMatrix = matMul(armLeftMatrix, this.forearmLeftMatrix);
+        forearmLeftMatrix = matMul(armLeftMatrix, forearmLeftMatrix);
+        this.forearmLeftMatrix = forearmLeftMatrix;
 
         // HandLeft matrix
-        this.handLeftMatrix = translation(
+        var handLeftMatrix = translation(
             0,
             this.forearmLength/2 + this.handRadius,
             0
         );
-        var handLeftMatrix = matMul(forearmLeftMatrix, this.handLeftMatrix);
+        handLeftMatrix = matMul(forearmLeftMatrix, handLeftMatrix);
+        this.handLeftMatrix = handLeftMatrix;
 
         // ArmRight matrix
-        this.armRightMatrix = translation(
+        var armRightMatrix = translation(
             this.armRightTranslation.x,
             this.armRightTranslation.y - this.chestLength/2,
             0
         );
-        var armRightMatrix = matMul(chestMatrix, this.armRightMatrix);
+        armRightMatrix = matMul(chestMatrix, armRightMatrix);
         armRightMatrix = matMul(armRightMatrix, rotZ(pi/2));
         armRightMatrix = matMul(armRightMatrix, translation(0, this.armLength/2, 0));
+        this.armRightMatrix = armRightMatrix;
 
         // ForearmRight matrix
-        this.forearmRightMatrix = translation(
+        var forearmRightMatrix = translation(
             0,
             this.forearmRightTranslation.y - this.armLength/2 + this.forearmLength/2,
             0,
         );
-        var forearmRightMatrix = matMul(armRightMatrix, this.forearmRightMatrix);
+        forearmRightMatrix = matMul(armRightMatrix, forearmRightMatrix);
+        this.forearmRightMatrix = forearmRightMatrix;
 
         // HandRight matrix
-        this.handRightMatrix = translation(
+        var handRightMatrix = translation(
             0,
             this.forearmLength/2 + this.handRadius,
             0
         );
-        var handRightMatrix = matMul(forearmRightMatrix, this.handRightMatrix);
+        handRightMatrix = matMul(forearmRightMatrix, handRightMatrix);
+        this.handRightMatrix = handRightMatrix;
 
         // LegLeft matrix
-        this.legLeftMatrix = translation(
+        var legLeftMatrix = translation(
             this.legLeftTranslation.x,
             this.legLeftTranslation.y - this.spineLength/2,
             0
         );
-        var legLeftMatrix = matMul(this.spineMatrix, this.legLeftMatrix);
+        legLeftMatrix = matMul(this.spineMatrix, legLeftMatrix);
         legLeftMatrix = matMul(legLeftMatrix, rotZ(-pi));
         legLeftMatrix = matMul(legLeftMatrix, translation(0, this.legLength/2, 0));
+        this.legLeftMatrix = legLeftMatrix;
 
         // ShinLeft matrix
-        this.shinLeftMatrix = translation(
+        var shinLeftMatrix = translation(
             0,
             this.shinLeftTranslation.y - this.legLength/2 + this.shinLength/2,
             0,
         );
-        var shinLeftMatrix = matMul(legLeftMatrix, this.shinLeftMatrix);
+        shinLeftMatrix = matMul(legLeftMatrix, shinLeftMatrix);
+        this.shinLeftMatrix = shinLeftMatrix;
 
         // FootLeft matrix
-        this.footLeftMatrix = translation(
+        var footLeftMatrix = translation(
             0,
             this.shinLength/2 + this.footWidth/2,
             0,
         );
-        var footLeftMatrix = matMul(shinLeftMatrix, this.footLeftMatrix);
+        footLeftMatrix = matMul(shinLeftMatrix, footLeftMatrix);
+        this.footLeftMatrix = footLeftMatrix;
 
         // LegRight matrix
-        this.legRightMatrix = translation(
+        var legRightMatrix = translation(
             this.legRightTranslation.x,
             this.legRightTranslation.y - this.spineLength/2,
             0
         );
-        var legRightMatrix = matMul(this.spineMatrix, this.legRightMatrix);
+        legRightMatrix = matMul(this.spineMatrix, legRightMatrix);
         legRightMatrix = matMul(legRightMatrix, rotZ(pi));
         legRightMatrix = matMul(legRightMatrix, translation(0, this.legLength/2, 0));
+        this.legRightMatrix = legRightMatrix;
 
         // ShinLeft matrix
-        this.shinRightMatrix = translation(
+        var shinRightMatrix = translation(
             0,
             this.shinRightTranslation.y - this.legLength/2 + this.shinLength/2,
             0,
         );
-        var shinRightMatrix = matMul(legRightMatrix, this.shinRightMatrix);
+        shinRightMatrix = matMul(legRightMatrix, shinRightMatrix);
+        this.shinRightMatrix = shinRightMatrix;
 
         // FootRight matrix
-        this.footRightMatrix = translation(
+        var footRightMatrix = translation(
             0,
             this.shinLength/2 + this.footWidth/2,
             0,
         );
-        var footRightMatrix = matMul(shinRightMatrix, this.footRightMatrix);
+        footRightMatrix = matMul(shinRightMatrix, footRightMatrix);
+        this.footRightMatrix = footRightMatrix;
 
 
 
@@ -490,63 +505,63 @@ class Robot {
         if (scene.getObjectById(this.spine.id) === undefined)
             scene.add(this.spine);
 
-		this.chest.setMatrix(chestMatrix);
+		this.chest.setMatrix(this.chestMatrix);
         if (scene.getObjectById(this.chest.id) === undefined)
             scene.add(this.chest);
 
-        this.neck.setMatrix(neckMatrix);
+        this.neck.setMatrix(this.neckMatrix);
         if (scene.getObjectById(this.neck.id) === undefined)
             scene.add(this.neck);
 
-        this.head.setMatrix(headMatrix);
+        this.head.setMatrix(this.headMatrix);
         if (scene.getObjectById(this.head.id) === undefined)
             scene.add(this.head);
 
-        this.armLeft.setMatrix(armLeftMatrix);
+        this.armLeft.setMatrix(this.armLeftMatrix);
         if (scene.getObjectById(this.armLeft.id) === undefined)
             scene.add(this.armLeft);
 
-        this.forearmLeft.setMatrix(forearmLeftMatrix);
+        this.forearmLeft.setMatrix(this.forearmLeftMatrix);
         if (scene.getObjectById(this.forearmLeft.id) === undefined)
             scene.add(this.forearmLeft);
 
-        this.handLeft.setMatrix(handLeftMatrix);
+        this.handLeft.setMatrix(this.handLeftMatrix);
         if (scene.getObjectById(this.handLeft.id) === undefined)
             scene.add(this.handLeft);
 
-        this.armRight.setMatrix(armRightMatrix);
+        this.armRight.setMatrix(this.armRightMatrix);
         if (scene.getObjectById(this.armRight.id) === undefined)
             scene.add(this.armRight);
 
-        this.forearmRight.setMatrix(forearmRightMatrix);
+        this.forearmRight.setMatrix(this.forearmRightMatrix);
         if (scene.getObjectById(this.forearmRight.id) === undefined)
             scene.add(this.forearmRight);
 
-        this.handRight.setMatrix(handRightMatrix);
+        this.handRight.setMatrix(this.handRightMatrix);
         if (scene.getObjectById(this.handRight.id) === undefined)
             scene.add(this.handRight);
 
-        this.legLeft.setMatrix(legLeftMatrix);
+        this.legLeft.setMatrix(this.legLeftMatrix);
         if (scene.getObjectById(this.legLeft.id) === undefined)
             scene.add(this.legLeft);
 
-        this.shinLeft.setMatrix(shinLeftMatrix);
+        this.shinLeft.setMatrix(this.shinLeftMatrix);
         if (scene.getObjectById(this.shinLeft.id) === undefined)
             scene.add(this.shinLeft);
 
-        this.footLeft.setMatrix(footLeftMatrix);
+        this.footLeft.setMatrix(this.footLeftMatrix);
         if (scene.getObjectById(this.footLeft.id) === undefined)
             scene.add(this.footLeft);
 
-        this.legRight.setMatrix(legRightMatrix);
+        this.legRight.setMatrix(this.legRightMatrix);
         if (scene.getObjectById(this.legRight.id) === undefined)
             scene.add(this.legRight);
 
-        this.shinRight.setMatrix(shinRightMatrix);
+        this.shinRight.setMatrix(this.shinRightMatrix);
         if (scene.getObjectById(this.shinRight.id) === undefined)
             scene.add(this.shinRight);
 
-        this.footRight.setMatrix(footRightMatrix);
+        this.footRight.setMatrix(this.footRightMatrix);
         if (scene.getObjectById(this.footRight.id) === undefined)
             scene.add(this.footRight);
 
@@ -604,7 +619,17 @@ class Robot {
 	}
 
     animate(t) {
-        // TODO Animation de course avec des rotations
+        // Positionner les membres dans une pose initiale de course
+        var runArmLeftMatrix = matMul(this.armLeftMatrix, translation(0, -this.armLength/2, 0));
+        runArmLeftMatrix = matMul(runArmLeftMatrix, rotZ(-pi/2));
+        runArmLeftMatrix = matMul(runArmLeftMatrix, translation(0, this.armLength/2, 0));
+        this.armLeft.setMatrix(runArmLeftMatrix);
+        
+        var runArmRightMatrix = matMul(this.armRightMatrix, translation(0, -this.armLength/2, 0));
+        runArmRightMatrix = matMul(runArmRightMatrix, rotZ(pi/2));
+        runArmRightMatrix = matMul(runArmRightMatrix, translation(0, this.armLength/2, 0));
+        this.armRight.setMatrix(runArmRightMatrix);
+        
     }
 
 }
