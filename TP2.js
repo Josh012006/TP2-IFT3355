@@ -710,7 +710,7 @@ class Robot {
 	}
 
 	pose2(){
-		var pose2SpineMatrix = matMul(this.spineMatrix, translation(0, -1, 0));
+		var pose2SpineMatrix = matMul(this.spineMatrix, translation(0, -1.1, 0));
         this.spine.setMatrix(pose2SpineMatrix);
 
         var pose2ChestMatrix = matMul(invert(this.spineMatrix), this.chestMatrix);
@@ -1269,8 +1269,25 @@ function updateBody() {
         robot.pose2();
         break;
     case 3:
+        var chair = null;
+        const loader = new ColladaLoader();
+        loader.load("model/chair.dae", (result) => {
+            chair = result.scene
+            const chairMatrix = matMul(scale(1.3, 2, 2), translation(0, -1.39, -0.2));
+            chair.applyMatrix4(chairMatrix);
+            scene.add(chair);
+        });
         break;
     case 4:
+        var stoneTexture = new THREE.TextureLoader().load('textures/stone_diffuse.png');
+
+        var stonePlateGeometry = new THREE.BoxGeometry(0.15, 2, 2);
+        var stonePlateMaterial = new THREE.MeshStandardMaterial({ 
+            map: stoneTexture
+        });
+        var stonePlate = new THREE.Mesh(stonePlateGeometry, stonePlateMaterial);
+        stonePlate.setMatrix(translation(2.3, 0, 0));
+        scene.add(stonePlate);
         break;
     case 5:
         break;
