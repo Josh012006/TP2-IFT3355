@@ -611,7 +611,102 @@ class Robot {
     }
 
 	pose1(){
-		// TODO DEFINIR LA PREMIERE POSE ICI
+        var pose1SpineMatrix = matMul(this.spineMatrix, translation(0, -1.3, 0));
+        this.spine.setMatrix(pose1SpineMatrix);
+
+        var pose1ChestMatrix = matMul(invert(this.spineMatrix), this.chestMatrix);
+        pose1ChestMatrix = matMul(pose1SpineMatrix, pose1ChestMatrix);
+        this.chest.setMatrix(pose1ChestMatrix);
+
+        var pose1NeckMatrix = matMul(invert(this.chestMatrix), this.neckMatrix);
+        pose1NeckMatrix = matMul(pose1ChestMatrix, pose1NeckMatrix);
+        this.neck.setMatrix(pose1NeckMatrix);
+
+        var pose1HeadMatrix = matMul(invert(this.neckMatrix), this.headMatrix);
+        pose1HeadMatrix = matMul(pose1NeckMatrix, pose1HeadMatrix);
+        pose1HeadMatrix = matMul(pose1HeadMatrix, rotY(pi/2));
+        this.head.setMatrix(pose1HeadMatrix);
+
+        //
+
+        var pose1ArmLeftMatrix = matMul(invert(this.chestMatrix), this.armLeftMatrix);
+        pose1ArmLeftMatrix = matMul(pose1ChestMatrix, pose1ArmLeftMatrix);
+        pose1ArmLeftMatrix = matMul(pose1ArmLeftMatrix, translation(0, -this.armLength/2, 0));
+        pose1ArmLeftMatrix = matMul(pose1ArmLeftMatrix, rotZ(pi/30));
+        pose1ArmLeftMatrix = matMul(pose1ArmLeftMatrix, translation(0, this.armLength/2, 0));
+        this.armLeft.setMatrix(pose1ArmLeftMatrix);
+
+        var pose1ForearmLeftMatrix = matMul(invert(this.armLeftMatrix), this.forearmLeftMatrix);
+        pose1ForearmLeftMatrix = matMul(pose1ArmLeftMatrix, pose1ForearmLeftMatrix);
+        this.forearmLeft.setMatrix(pose1ForearmLeftMatrix);
+
+        var pose1HandLeftMatrix = matMul(invert(this.forearmLeftMatrix), this.handLeftMatrix);
+        pose1HandLeftMatrix = matMul(pose1ForearmLeftMatrix, pose1HandLeftMatrix);
+        this.handLeft.setMatrix(pose1HandLeftMatrix);
+
+        //
+
+        var pose1ArmRightMatrix = matMul(invert(this.chestMatrix), this.armRightMatrix);
+        pose1ArmRightMatrix = matMul(pose1ChestMatrix, pose1ArmRightMatrix);
+        pose1ArmRightMatrix = matMul(pose1ArmRightMatrix, translation(0, -this.armLength/2, 0));
+        pose1ArmRightMatrix = matMul(pose1ArmRightMatrix, rotZ(3*pi/8));
+        pose1ArmRightMatrix = matMul(pose1ArmRightMatrix, translation(0, this.armLength/2, 0));
+        this.armRight.setMatrix(pose1ArmRightMatrix);
+
+        var pose1ForearmRightMatrix = matMul(invert(this.armRightMatrix), this.forearmRightMatrix);
+        pose1ForearmRightMatrix = matMul(pose1ArmRightMatrix, pose1ForearmRightMatrix);
+        pose1ForearmRightMatrix = matMul(pose1ForearmRightMatrix, translation(0, -this.forearmLength/2, 0));
+        pose1ForearmRightMatrix = matMul(pose1ForearmRightMatrix, rotZ(pi/2));
+        pose1ForearmRightMatrix = matMul(pose1ForearmRightMatrix, rotX(pi/2));
+        pose1ForearmRightMatrix = matMul(pose1ForearmRightMatrix, translation(0, this.forearmLength/2, 0));
+        this.forearmRight.setMatrix(pose1ForearmRightMatrix);
+
+        var pose1HandRightMatrix = matMul(invert(this.forearmRightMatrix), this.handRightMatrix);
+        pose1HandRightMatrix = matMul(pose1ForearmRightMatrix, pose1HandRightMatrix);
+        this.handRight.setMatrix(pose1HandRightMatrix);
+
+        //
+
+        var pose1LegLeftMatrix = matMul(invert(this.spineMatrix), this.legLeftMatrix);
+        pose1LegLeftMatrix = matMul(pose1SpineMatrix, pose1LegLeftMatrix);
+		pose1LegLeftMatrix = matMul(pose1LegLeftMatrix, translation(0, -this.legLength/2, 0));
+        pose1LegLeftMatrix = matMul(pose1LegLeftMatrix, rotZ(10*pi/18));
+        pose1LegLeftMatrix = matMul(pose1LegLeftMatrix, translation(0, this.legLength/2, 0));
+        this.legLeft.setMatrix(pose1LegLeftMatrix);
+
+        var pose1ShinLeftMatrix = matMul(invert(this.legLeftMatrix), this.shinLeftMatrix);
+        pose1ShinLeftMatrix = matMul(pose1LegLeftMatrix, pose1ShinLeftMatrix);
+        pose1ShinLeftMatrix = matMul(pose1ShinLeftMatrix, translation(0, -this.shinLength/2, 0));
+        pose1ShinLeftMatrix = matMul(pose1ShinLeftMatrix, rotZ(-10*pi/18));
+        pose1ShinLeftMatrix = matMul(pose1ShinLeftMatrix, translation(0, this.shinLength/2, 0));
+        this.shinLeft.setMatrix(pose1ShinLeftMatrix);
+
+        var pose1FootLeftMatrix = matMul(invert(this.shinLeftMatrix), this.footLeftMatrix);
+        pose1FootLeftMatrix = matMul(pose1ShinLeftMatrix, pose1FootLeftMatrix);
+        pose1FootLeftMatrix = matMul(pose1FootLeftMatrix, rotY(pi/2));
+        this.footLeft.setMatrix(pose1FootLeftMatrix);
+
+        //
+
+        var pose1LegRightMatrix = matMul(invert(this.spineMatrix), this.legRightMatrix);
+        pose1LegRightMatrix = matMul(pose1SpineMatrix, pose1LegRightMatrix);
+		pose1LegRightMatrix = matMul(pose1LegRightMatrix, translation(0, -this.legLength/2, 0));
+        pose1LegRightMatrix = matMul(pose1LegRightMatrix, rotZ(-8*pi/18));
+        pose1LegRightMatrix = matMul(pose1LegRightMatrix, translation(0, this.legLength/2, 0));
+        this.legRight.setMatrix(pose1LegRightMatrix);
+
+        var pose1ShinRightMatrix = matMul(invert(this.legRightMatrix), this.shinRightMatrix);
+        pose1ShinRightMatrix = matMul(pose1LegRightMatrix, pose1ShinRightMatrix);
+        pose1ShinRightMatrix = matMul(pose1ShinRightMatrix, translation(0, -this.shinLength/2, 0));
+        pose1ShinRightMatrix = matMul(pose1ShinRightMatrix, rotZ(pi/5));
+        pose1ShinRightMatrix = matMul(pose1ShinRightMatrix, translation(0, this.shinLength/2, 0));
+        this.shinRight.setMatrix(pose1ShinRightMatrix);
+
+        var pose1FootRightMatrix = matMul(invert(this.shinRightMatrix), this.footRightMatrix);
+        pose1FootRightMatrix = matMul(pose1ShinRightMatrix, pose1FootRightMatrix);
+        pose1FootRightMatrix = matMul(pose1FootRightMatrix, rotZ(pi/4));
+        pose1FootRightMatrix = matMul(pose1FootRightMatrix, rotY(-pi/2));
+        this.footRight.setMatrix(pose1FootRightMatrix);
 	}
 
 	pose2(){
@@ -620,7 +715,7 @@ class Robot {
 
     animate(t) {
         // Run parameters
-        var w = 1.5;      // circular velocity
+        var w = 2.7;      // circular velocity
 
         // Defining a small motion in the torso
         var runSpineMatrix = matMul(this.spineMatrix, rotX(pi/32 * cos(w*t)));
@@ -639,7 +734,9 @@ class Robot {
         this.head.setMatrix(runHeadMatrix);
 
         // Defining the animation for the arms
-        var runArmLeftMatrix = matMul(this.armLeftMatrix, translation(0, -this.armLength/2, 0));
+        var runArmLeftMatrix = matMul(invert(this.chestMatrix), this.armLeftMatrix);
+        runArmLeftMatrix = matMul(runChestMatrix, runArmLeftMatrix);
+        runArmLeftMatrix = matMul(runArmLeftMatrix, translation(0, -this.armLength/2, 0));
         runArmLeftMatrix = matMul(runArmLeftMatrix, rotZ(-pi/2));
         runArmLeftMatrix = matMul(runArmLeftMatrix, rotX(pi/4 * cos(w*t)));
         runArmLeftMatrix = matMul(runArmLeftMatrix, translation(0, this.armLength/2, 0));
@@ -655,8 +752,13 @@ class Robot {
         var runHandLeftMatrix = matMul(invert(this.forearmLeftMatrix), this.handLeftMatrix);
         runHandLeftMatrix = matMul(runForearmLeftMatrix, runHandLeftMatrix);
         this.handLeft.setMatrix(runHandLeftMatrix);
+
+        //
         
-        var runArmRightMatrix = matMul(this.armRightMatrix, translation(0, -this.armLength/2, 0));
+        var runArmRightMatrix = matMul(invert(this.chestMatrix), this.armRightMatrix);
+        runArmRightMatrix = matMul(runChestMatrix, runArmRightMatrix);
+        runArmRightMatrix = matMul(runArmRightMatrix, translation(0, -this.armLength/2, 0));
+        runArmRightMatrix = matMul(this.armRightMatrix, translation(0, -this.armLength/2, 0));
         runArmRightMatrix = matMul(runArmRightMatrix, rotZ(pi/2));
         runArmRightMatrix = matMul(runArmRightMatrix, rotX(-pi/4 * cos(w*t)));
         runArmRightMatrix = matMul(runArmRightMatrix, translation(0, this.armLength/2, 0));
@@ -691,6 +793,8 @@ class Robot {
         var runFootLeftMatrix = matMul(invert(this.shinLeftMatrix), this.footLeftMatrix);
         runFootLeftMatrix = matMul(runShinLeftMatrix, runFootLeftMatrix);
         this.footLeft.setMatrix(runFootLeftMatrix);
+
+        //
 
         var runLegRightMatrix = matMul(invert(this.spineMatrix), this.legRightMatrix);
         runLegRightMatrix = matMul(runSpineMatrix, runLegRightMatrix);
@@ -1058,20 +1162,16 @@ function updateBody() {
         var t = clock.getElapsedTime();
         robot.animate(t);
         break;
-
-        // TODO add poses here:
     case 1:
+        robot.pose1();
         break;
-
     case 2:
+        robot.pose2();
         break;
-
     case 3:
         break;
-
     case 4:
         break;
-
     case 5:
         break;
     case 6:
