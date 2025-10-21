@@ -366,7 +366,7 @@ class Robot {
                 0, 1, 0, this.neckTranslation.y-this.chestLength/2+this.neckLength/2,
                 0, 0, 1, 0,
                 0, 0, 0, 1);
-        neckMatrix = new THREE.Matrix4().multiplyMatrices(chestMatrix, neckMatrix);
+        neckMatrix = new THREE.Matrix4().multiplyMatrices(this.chestMatrix, neckMatrix);
         this.neckMatrix = neckMatrix;
 
 
@@ -376,7 +376,7 @@ class Robot {
                 0, 1, 0, this.headTranslation.y-this.neckLength/2+this.headLength/2,
                 0, 0, 1, 0,
                 0, 0, 0, 1);
-        headMatrix = new THREE.Matrix4().multiplyMatrices(neckMatrix, headMatrix);
+        headMatrix = new THREE.Matrix4().multiplyMatrices(this.neckMatrix, headMatrix);
         this.headMatrix = headMatrix;
         
         // ArmLeft matrix
@@ -385,7 +385,7 @@ class Robot {
             this.armLeftTranslation.y - this.chestLength/2,
             0
         );
-        armLeftMatrix = matMul(chestMatrix, armLeftMatrix);
+        armLeftMatrix = matMul(this.chestMatrix, armLeftMatrix);
         armLeftMatrix = matMul(armLeftMatrix, rotZ(-pi/2));
         armLeftMatrix = matMul(armLeftMatrix, translation(0, this.armLength/2, 0));
         this.armLeftMatrix = armLeftMatrix;
@@ -396,7 +396,7 @@ class Robot {
             this.forearmLeftTranslation.y - this.armLength/2 + this.forearmLength/2,
             0,
         );
-        forearmLeftMatrix = matMul(armLeftMatrix, forearmLeftMatrix);
+        forearmLeftMatrix = matMul(this.armLeftMatrix, forearmLeftMatrix);
         this.forearmLeftMatrix = forearmLeftMatrix;
 
         // HandLeft matrix
@@ -405,7 +405,7 @@ class Robot {
             this.forearmLength/2 + this.handRadius,
             0
         );
-        handLeftMatrix = matMul(forearmLeftMatrix, handLeftMatrix);
+        handLeftMatrix = matMul(this.forearmLeftMatrix, handLeftMatrix);
         this.handLeftMatrix = handLeftMatrix;
 
         // ArmRight matrix
@@ -414,7 +414,7 @@ class Robot {
             this.armRightTranslation.y - this.chestLength/2,
             0
         );
-        armRightMatrix = matMul(chestMatrix, armRightMatrix);
+        armRightMatrix = matMul(this.chestMatrix, armRightMatrix);
         armRightMatrix = matMul(armRightMatrix, rotZ(pi/2));
         armRightMatrix = matMul(armRightMatrix, translation(0, this.armLength/2, 0));
         this.armRightMatrix = armRightMatrix;
@@ -425,7 +425,7 @@ class Robot {
             this.forearmRightTranslation.y - this.armLength/2 + this.forearmLength/2,
             0,
         );
-        forearmRightMatrix = matMul(armRightMatrix, forearmRightMatrix);
+        forearmRightMatrix = matMul(this.armRightMatrix, forearmRightMatrix);
         this.forearmRightMatrix = forearmRightMatrix;
 
         // HandRight matrix
@@ -434,7 +434,7 @@ class Robot {
             this.forearmLength/2 + this.handRadius,
             0
         );
-        handRightMatrix = matMul(forearmRightMatrix, handRightMatrix);
+        handRightMatrix = matMul(this.forearmRightMatrix, handRightMatrix);
         this.handRightMatrix = handRightMatrix;
 
         // LegLeft matrix
@@ -454,7 +454,7 @@ class Robot {
             this.shinLeftTranslation.y - this.legLength/2 + this.shinLength/2,
             0,
         );
-        shinLeftMatrix = matMul(legLeftMatrix, shinLeftMatrix);
+        shinLeftMatrix = matMul(this.legLeftMatrix, shinLeftMatrix);
         this.shinLeftMatrix = shinLeftMatrix;
 
         // FootLeft matrix
@@ -463,7 +463,7 @@ class Robot {
             this.shinLength/2 + this.footWidth/2,
             0,
         );
-        footLeftMatrix = matMul(shinLeftMatrix, footLeftMatrix);
+        footLeftMatrix = matMul(this.shinLeftMatrix, footLeftMatrix);
         this.footLeftMatrix = footLeftMatrix;
 
         // LegRight matrix
@@ -483,7 +483,7 @@ class Robot {
             this.shinRightTranslation.y - this.legLength/2 + this.shinLength/2,
             0,
         );
-        shinRightMatrix = matMul(legRightMatrix, shinRightMatrix);
+        shinRightMatrix = matMul(this.legRightMatrix, shinRightMatrix);
         this.shinRightMatrix = shinRightMatrix;
 
         // FootRight matrix
@@ -492,7 +492,7 @@ class Robot {
             this.shinLength/2 + this.footWidth/2,
             0,
         );
-        footRightMatrix = matMul(shinRightMatrix, footRightMatrix);
+        footRightMatrix = matMul(this.shinRightMatrix, footRightMatrix);
         this.footRightMatrix = footRightMatrix;
 
 
@@ -624,11 +624,33 @@ class Robot {
         runArmLeftMatrix = matMul(runArmLeftMatrix, rotZ(-pi/2));
         runArmLeftMatrix = matMul(runArmLeftMatrix, translation(0, this.armLength/2, 0));
         this.armLeft.setMatrix(runArmLeftMatrix);
+
+        var runForearmLeftMatrix = matMul(invert(this.armLeftMatrix), this.forearmLeftMatrix);
+        runForearmLeftMatrix = matMul(runArmLeftMatrix, runForearmLeftMatrix);
+        runForearmLeftMatrix = matMul(runForearmLeftMatrix, translation(0, -this.forearmLength/2, 0));
+        runForearmLeftMatrix = matMul(runForearmLeftMatrix, rotX(pi/2));
+        runForearmLeftMatrix = matMul(runForearmLeftMatrix, translation(0, this.forearmLength/2, 0));
+        this.forearmLeft.setMatrix(runForearmLeftMatrix);
+
+        var runHandLeftMatrix = matMul(invert(this.forearmLeftMatrix), this.handLeftMatrix);
+        runHandLeftMatrix = matMul(runForearmLeftMatrix, runHandLeftMatrix);
+        this.handLeft.setMatrix(runHandLeftMatrix);
         
         var runArmRightMatrix = matMul(this.armRightMatrix, translation(0, -this.armLength/2, 0));
         runArmRightMatrix = matMul(runArmRightMatrix, rotZ(pi/2));
         runArmRightMatrix = matMul(runArmRightMatrix, translation(0, this.armLength/2, 0));
         this.armRight.setMatrix(runArmRightMatrix);
+
+        var runForearmRightMatrix = matMul(invert(this.armRightMatrix), this.forearmRightMatrix);
+        runForearmRightMatrix = matMul(runArmRightMatrix, runForearmRightMatrix);
+        runForearmRightMatrix = matMul(runForearmRightMatrix, translation(0, -this.forearmLength/2, 0));
+        runForearmRightMatrix = matMul(runForearmRightMatrix, rotX(pi/2));
+        runForearmRightMatrix = matMul(runForearmRightMatrix, translation(0, this.forearmLength/2, 0));
+        this.forearmRight.setMatrix(runForearmRightMatrix);
+
+        var runHandRightMatrix = matMul(invert(this.forearmRightMatrix), this.handRightMatrix);
+        runHandRightMatrix = matMul(runForearmRightMatrix, runHandRightMatrix);
+        this.handRight.setMatrix(runHandRightMatrix);
         
     }
 
@@ -949,6 +971,10 @@ function scale(x, y, z) {
         0, 0, 0, 1
     )
     return scalingMatrix;
+}
+
+function invert(m) {
+    return m.clone().invert();
 }
 
 function cos(angle) {
