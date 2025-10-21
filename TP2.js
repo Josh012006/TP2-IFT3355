@@ -195,7 +195,7 @@ THREE.Object3D.prototype.setMatrix = function (m) {
 class Robot {
     constructor(h) {
         this.spineLength = 0.65305;
-		this.chestLength =0.46487;
+		this.chestLength = 0.46487;
 		this.neckLength = 0.24523
 		this.headLength = 0.39284;
 
@@ -247,6 +247,11 @@ class Robot {
         this.armRadius = 0.10;
 
         this.handRadius = 0.1;
+
+        // Helper for animation  
+        this.animationStart = true;
+        this.turningStart = true;
+        this.armLeftDirection = 1;
 
         // Material
         this.material = new THREE.MeshNormalMaterial();
@@ -326,12 +331,12 @@ class Robot {
             this.shinRight = new THREE.Mesh(shinRightGeometry, this.material);
 
         // FootLeft geometry
-        var footLeftGeometry = new THREE.BoxGeometry(this.footDepth, this.footWidth, this.footDepth);
+        var footLeftGeometry = new THREE.BoxGeometry(this.footWidth, 0.1, this.footDepth);
         if (!this.hasOwnProperty("footLeft"))
             this.footLeft = new THREE.Mesh(footLeftGeometry, this.material);
 
         // FootRight geometry
-        var footRightGeometry = new THREE.BoxGeometry(this.footDepth, this.footWidth, this.footDepth);
+        var footRightGeometry = new THREE.BoxGeometry(this.footWidth, 0.1, this.footDepth);
         if (!this.hasOwnProperty("footRight"))
             this.footRight = new THREE.Mesh(footRightGeometry, this.material);
 
@@ -373,12 +378,13 @@ class Robot {
         
         // ArmLeft matrix
         this.armLeftMatrix = translation(
-            this.armLeftTranslation.x + this.bodyWidth/2 + this.armLength/2,
-            this.armLeftTranslation.y - this.chestLength/2 - this.armLength/2,
+            this.armLeftTranslation.x,
+            this.armLeftTranslation.y - this.chestLength/2,
             0
         );
         var armLeftMatrix = matMul(chestMatrix, this.armLeftMatrix);
-        armLeftMatrix = matMul(armLeftMatrix, rotZ(this.armLeftRotation.z));
+        armLeftMatrix = matMul(armLeftMatrix, rotZ(-pi/2));
+        armLeftMatrix = matMul(armLeftMatrix, translation(0, this.armLength/2, 0));
 
         // ForearmLeft matrix
         this.forearmLeftMatrix = translation(
@@ -398,12 +404,13 @@ class Robot {
 
         // ArmRight matrix
         this.armRightMatrix = translation(
-            this.armRightTranslation.x - this.bodyWidth/2 - this.armLength/2,
-            this.armRightTranslation.y - this.chestLength/2 - this.armLength/2,
+            this.armRightTranslation.x,
+            this.armRightTranslation.y - this.chestLength/2,
             0
         );
         var armRightMatrix = matMul(chestMatrix, this.armRightMatrix);
-        armRightMatrix = matMul(armRightMatrix, rotZ(this.armRightRotation.z));
+        armRightMatrix = matMul(armRightMatrix, rotZ(pi/2));
+        armRightMatrix = matMul(armRightMatrix, translation(0, this.armLength/2, 0));
 
         // ForearmRight matrix
         this.forearmRightMatrix = translation(
@@ -423,12 +430,13 @@ class Robot {
 
         // LegLeft matrix
         this.legLeftMatrix = translation(
-            this.legLeftTranslation.x + this.thighRadius/2,
-            this.legLeftTranslation.y - this.spineLength/2 - this.legLength/2,
+            this.legLeftTranslation.x,
+            this.legLeftTranslation.y - this.spineLength/2,
             0
         );
         var legLeftMatrix = matMul(this.spineMatrix, this.legLeftMatrix);
-        legLeftMatrix = matMul(legLeftMatrix, rotZ(this.legLeftRotation.z));
+        legLeftMatrix = matMul(legLeftMatrix, rotZ(-pi));
+        legLeftMatrix = matMul(legLeftMatrix, translation(0, this.legLength/2, 0));
 
         // ShinLeft matrix
         this.shinLeftMatrix = translation(
@@ -448,12 +456,13 @@ class Robot {
 
         // LegRight matrix
         this.legRightMatrix = translation(
-            this.legRightTranslation.x - this.thighRadius/2,
-            this.legRightTranslation.y - this.spineLength/2 - this.legLength/2,
+            this.legRightTranslation.x,
+            this.legRightTranslation.y - this.spineLength/2,
             0
         );
         var legRightMatrix = matMul(this.spineMatrix, this.legRightMatrix);
-        legRightMatrix = matMul(legRightMatrix, rotZ(this.legRightRotation.z));
+        legRightMatrix = matMul(legRightMatrix, rotZ(pi));
+        legRightMatrix = matMul(legRightMatrix, translation(0, this.legLength/2, 0));
 
         // ShinLeft matrix
         this.shinRightMatrix = translation(
@@ -595,8 +604,7 @@ class Robot {
 	}
 
     animate(t) {
-        // Do animation here
-
+        // TODO Animation de course avec des rotations
     }
 
 }
@@ -939,6 +947,7 @@ function updateBody() {
     switch (channel) {
     case 0:
         var t = clock.getElapsedTime();
+        robot.animate(t);
         break;
 
         // TODO add poses here:
