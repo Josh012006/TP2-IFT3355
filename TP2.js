@@ -611,7 +611,7 @@ class Robot {
     }
 
 	pose1(){
-        var pose1SpineMatrix = matMul(this.spineMatrix, translation(0, -1.3, 0));
+        var pose1SpineMatrix = matMul(this.spineMatrix, translation(5.8, -1.3, 0));
         this.spine.setMatrix(pose1SpineMatrix);
 
         var pose1ChestMatrix = matMul(invert(this.spineMatrix), this.chestMatrix);
@@ -710,7 +710,7 @@ class Robot {
 	}
 
 	pose2(){
-		var pose2SpineMatrix = matMul(this.spineMatrix, translation(0, -1.1, 0));
+		var pose2SpineMatrix = matMul(this.spineMatrix, translation(0, -1.1, -5.2));
         this.spine.setMatrix(pose2SpineMatrix);
 
         var pose2ChestMatrix = matMul(invert(this.spineMatrix), this.chestMatrix);
@@ -1039,6 +1039,32 @@ function init() {
     floor.position.y -= 2.5;
     scene.add(floor);
 
+    var stoneTexture = new THREE.TextureLoader().load('textures/stone_diffuse.png');
+    var stonePlateGeometry = new THREE.BoxGeometry(0.15, 2, 2);
+    var stonePlateMaterial = new THREE.MeshStandardMaterial({ 
+        map: stoneTexture
+    });
+    var stonePlate = new THREE.Mesh(stonePlateGeometry, stonePlateMaterial);
+    stonePlate.setMatrix(translation(8, 0, 0));
+    scene.add(stonePlate);
+
+    const chairTexture = new THREE.TextureLoader().load('textures/leather_diffuse.png');
+    const chairMaterial = new THREE.MeshStandardMaterial({
+        map: chairTexture
+    });
+    loader.load("./model/chair.dae", (result) => {
+        var chair = result.scene
+        const chairMatrix = matMul(scale(1.3, 2, 1.5), translation(0, -1.39, -3.5));
+        chair.applyMatrix4(chairMatrix);
+        chair.traverse((child) => {
+            if (child.isMesh) {
+                child.material = chairMaterial;
+                child.material.needsUpdate = true;
+            }
+        });
+        scene.add(chair);
+    });
+
 }
 
 
@@ -1269,25 +1295,8 @@ function updateBody() {
         robot.pose2();
         break;
     case 3:
-        var chair = null;
-        const loader = new ColladaLoader();
-        loader.load("model/chair.dae", (result) => {
-            chair = result.scene
-            const chairMatrix = matMul(scale(1.3, 2, 2), translation(0, -1.39, -0.2));
-            chair.applyMatrix4(chairMatrix);
-            scene.add(chair);
-        });
         break;
     case 4:
-        var stoneTexture = new THREE.TextureLoader().load('textures/stone_diffuse.png');
-
-        var stonePlateGeometry = new THREE.BoxGeometry(0.15, 2, 2);
-        var stonePlateMaterial = new THREE.MeshStandardMaterial({ 
-            map: stoneTexture
-        });
-        var stonePlate = new THREE.Mesh(stonePlateGeometry, stonePlateMaterial);
-        stonePlate.setMatrix(translation(2.3, 0, 0));
-        scene.add(stonePlate);
         break;
     case 5:
         break;
