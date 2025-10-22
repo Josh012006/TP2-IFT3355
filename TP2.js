@@ -248,11 +248,6 @@ class Robot {
 
         this.handRadius = 0.1;
 
-        // Helper for animation  
-        this.animationStart = true;
-        this.turningStart = true;
-        this.armLeftDirection = 1;
-
         // Material
         this.material = new THREE.MeshNormalMaterial();
         this.human = h;
@@ -565,6 +560,9 @@ class Robot {
         if (scene.getObjectById(this.footRight.id) === undefined)
             scene.add(this.footRight);
 
+
+        this.updateHuman();
+
     }
     hideRobot() {
         this.spine.visible = false;
@@ -707,6 +705,9 @@ class Robot {
         pose1FootRightMatrix = matMul(pose1FootRightMatrix, rotZ(pi/4));
         pose1FootRightMatrix = matMul(pose1FootRightMatrix, rotY(-pi/2));
         this.footRight.setMatrix(pose1FootRightMatrix);
+
+        
+        this.updateHuman();
 	}
 
 	pose2(){
@@ -811,11 +812,14 @@ class Robot {
         pose2FootRightMatrix = matMul(pose2ShinRightMatrix, pose2FootRightMatrix);
         pose2FootRightMatrix = matMul(pose2FootRightMatrix, rotY(pi/8));
         this.footRight.setMatrix(pose2FootRightMatrix);
+
+        
+        this.updateHuman();
 	}
 
     animate(t) {
         // Run parameters
-        var w = 2.7;      // circular velocity
+        var w = 5;      // circular velocity
 
         // Defining a small motion in the torso
         var runSpineMatrix = matMul(this.spineMatrix, rotX(pi/32 * cos(w*t)));
@@ -913,7 +917,27 @@ class Robot {
         var runFootRightMatrix = matMul(invert(this.shinRightMatrix), this.footRightMatrix);
         runFootRightMatrix = matMul(runShinRightMatrix, runFootRightMatrix);
         this.footRight.setMatrix(runFootRightMatrix);
+
         
+        this.updateHuman();
+        
+    }
+
+    updateHuman() {
+        boneDict["Spine"].matrix = matMul(this.spine.matrix, invert(boneDict["Spine"].matrixWorld));
+        boneDict["Chest"].matrix = matMul(this.chest.matrix, invert(boneDict["Chest"].matrixWorld));
+        boneDict["Neck"].matrix = matMul(this.neck.matrix, invert(boneDict["Neck"].matrixWorld));
+        boneDict["Head"].matrix = matMul(this.head.matrix, invert(boneDict["Head"].matrixWorld));
+        boneDict["Arm_L"].matrix = matMul(this.armLeft.matrix, invert(boneDict["Arm_L"].matrixWorld));
+        boneDict["Forearm_L"].matrix = matMul(this.forearmLeft.matrix, invert(boneDict["Forearm_L"].matrixWorld));
+        boneDict["Arm_R"].matrix = matMul(this.armRight.matrix, invert(boneDict["Arm_R"].matrixWorld));
+        boneDict["Forearm_R"].matrix = matMul(this.forearmRight.matrix, invert(boneDict["Forearm_R"].matrixWorld));
+        boneDict["Leg_L"].matrix = matMul(this.legLeft.matrix, invert(boneDict["Leg_L"].matrixWorld));
+        boneDict["Shin_L"].matrix = matMul(this.shinLeft.matrix, invert(boneDict["Shin_L"].matrixWorld));
+        boneDict["Leg_R"].matrix = matMul(this.legRight.matrix, invert(boneDict["Leg_R"].matrixWorld));
+        boneDict["Shin_R"].matrix = matMul(this.shinRight.matrix, invert(boneDict["Shin_R"].matrixWorld));
+
+        buildShaderBoneMatrix();
     }
 
 }
