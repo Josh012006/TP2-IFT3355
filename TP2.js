@@ -1063,13 +1063,14 @@ function init() {
     floor.position.y -= 2.5;
     scene.add(floor);
 
+    // Added some objects to the scene fo the question 2
     var stoneTexture = new THREE.TextureLoader().load('textures/stone_diffuse.png');
     var stonePlateGeometry = new THREE.BoxGeometry(0.15, 2, 2);
     var stonePlateMaterial = new THREE.MeshStandardMaterial({ 
         map: stoneTexture
     });
     var stonePlate = new THREE.Mesh(stonePlateGeometry, stonePlateMaterial);
-    stonePlate.setMatrix(translation(8, 0, 0));
+    stonePlate.setMatrix(translation(9, 0, 0));
     scene.add(stonePlate);
 
     const chairTexture = new THREE.TextureLoader().load('textures/leather_diffuse.png');
@@ -1117,7 +1118,6 @@ function buildSkeleton() {
 	boneDict['Shin_L'].matrixWorld = matMul(boneDict['Leg_L'].matrixWorld, realBones[9].matrix);
 	boneDict['Leg_R'].matrixWorld = matMul(boneDict['Spine'].matrixWorld, realBones[10].matrix);
 	boneDict['Shin_R'].matrixWorld = matMul(boneDict['Leg_R'].matrixWorld, realBones[11].matrix);
-
 }
 
 /**

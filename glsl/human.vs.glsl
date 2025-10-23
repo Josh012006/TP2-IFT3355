@@ -6,6 +6,7 @@ uniform mat4 bones[12];
 
 void main(){
     interpolatedNormal = normal;
+    
 	vec4 normalizedSkinWeight = normalize(skinWeight);
     mat4 computedPosition = normalizedSkinWeight.r * bones[int(skinIndex.r)] + 
                             normalizedSkinWeight.g * bones[int(skinIndex.g)] + 
