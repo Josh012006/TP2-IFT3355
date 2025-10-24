@@ -12,5 +12,5 @@ void main(){
                             normalizedSkinWeight.g * bones[int(skinIndex.g)] + 
                             normalizedSkinWeight.b * bones[int(skinIndex.b)] + 
                             normalizedSkinWeight.a * bones[int(skinIndex.a)];
-	gl_Position = projectionMatrix * modelViewMatrix * computedPosition *  vec4(position,1.0);
+	gl_Position = projectionMatrix * modelViewMatrix * computedPosition * vec4(position,1.0);
 }
