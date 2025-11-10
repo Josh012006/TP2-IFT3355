@@ -9,10 +9,10 @@
   </tr>
   <tr>
     <td>
-      <img src="public/display2.png">
+      <img src="public/display.png">
     </td>
     <td>
-      <img src="public/display3.png">
+      <img src="public/display4.png">
     </td>
   </tr>
 </table>
